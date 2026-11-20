@@ -41,7 +41,7 @@ public final class Session {
     public static String serverUrl(Context c) {
         String saved = prefs(c).getString("serverUrl", null);
         if (saved != null) return saved;
-        return isEmulator() ? ApiClient.DEFAULT_BASE_URL : "";
+        return ApiClient.DEFAULT_BASE_URL;
     }
 
     /** Normalizes "host:port" / "https://x/" input into "http(s)://host[:port]". */

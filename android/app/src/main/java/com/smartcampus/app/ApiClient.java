@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 /** Thin HTTP client over HttpURLConnection (no external libraries needed). */
 public final class ApiClient {
 
-    /** Default: 10.0.2.2 is the host machine's localhost as seen from the Android emulator. */
-    public static final String DEFAULT_BASE_URL = "http://10.0.2.2:8080";
+    /** Default: hosted backend on Render (free tier, cold start ~50s). Editable on the login screen. */
+    public static final String DEFAULT_BASE_URL = "https://smart-campus-nf7e.onrender.com";
 
     private static String baseUrl = DEFAULT_BASE_URL;
     private static String token;

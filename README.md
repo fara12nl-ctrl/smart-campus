@@ -6,8 +6,8 @@ REST backend with a MySQL/MariaDB database, a dark-purple web dashboard, and an 
 ```
 +---------------------+         HTTP/JSON          +---------------------------+
 |  Android app (Java) |  ----------------------->  |  Spring Boot backend      |
-|  login, dashboard,  |   http://10.0.2.2:8080     |  (Java 21, port 8080)     |
-|  generic CRUD list  |                            |  Controllers -> Services  |
+|  login, dashboard,  |  smart-campus-nf7e         |  (Java 21, Render Docker) |
+|  generic CRUD list  |  .onrender.com (default)   |  Controllers -> Services  |
 +---------------------+                            |  -> DAO (JDBC) -> DB      |
                                                    +-------------+-------------+
 +---------------------+         HTTP/JSON                        |
@@ -99,9 +99,11 @@ C:\Users\ABU TALHA\AppData\Local\Android\Sdk\platform-tools\adb.exe shell am sta
 ```
 
 Or open `smart-campus/android` in Android Studio and press Run.
-The app talks to `http://10.0.2.2:8080` (host loopback from the emulator).
+The app's default server is the hosted backend **https://smart-campus-nf7e.onrender.com**
+(editable in the login screen's *Server URL* field). For a local backend instead,
+enter `http://10.0.2.2:8080` (emulator loopback) in that field.
 
-**Prebuilt APK:** `apk/SmartCampus-v1.2.apk` (signed release build, tested on emulator + real phone).
+**Prebuilt APK:** `apk/SmartCampus-v1.3.apk` (signed release build, defaults to the cloud URL, tested on emulator).
 Signing keystore: `android/smartcampus-release.jks` (store/key password: `smartcampus123`, alias `smartcampus`).
 To rebuild the release APK: `gradle.bat assembleRelease` inside `smart-campus\android`.
 
@@ -120,19 +122,22 @@ Notes:
   tunnel alone if the rest is already running.
 - Emulator default `http://10.0.2.2:8080` needs no tunnel.
 
-### 6. Cloud deploy (24/7 fixed URL — PC off bhi chalta hai)
+### 6. Cloud deploy — LIVE (24/7 fixed URL, PC off bhi chalta hai)
 
-Ready-made for a free Render deploy: `backend/Dockerfile` (multi-stage build),
-`render.yaml` blueprint, and env-driven config (`PORT`, `DB_URL`, `DB_USER`,
-`DB_PASSWORD`). Needs three free sign-ups (no card): GitHub, Render, and a
-MySQL host (db4free.net is instant). After the first deploy the URL is fixed
-forever, e.g. `https://smart-campus.onrender.com`.
+**Live backend: <https://smart-campus-nf7e.onrender.com>**
+(health: `/api/health`, web dashboard: `/` — login `admin` / `admin123`)
 
-Steps: create GitHub account → create Render account (GitHub login) → create
-MySQL database (db4free.net) → import `database/schema.sql` + `database/seed.sql`
-→ push repo → Render "New Blueprint" → set `DB_URL` / `DB_USER` / `DB_PASSWORD`.
-Render's free tier sleeps after 15 min idle; run `scripts\keep-cloud-awake.bat`
-(reads `cloud-url.txt`) while the PC is on to keep it warm.
+Deployed from this repo via Render Blueprint `smart-campus-pbl`
+(`render.yaml` → Docker build of `backend/`). Database: hosted MySQL 8.4 on
+Aiven (`smart_campus`, TLS required), schema + seed imported.
+
+To redeploy/verify: push to GitHub `main` → Render auto-deploys from
+`render.yaml`. Free tier sleeps after 15 min idle — the first request then
+takes ~50 s (the app just waits; optionally run `scripts\keep-cloud-awake.bat`,
+which reads `cloud-url.txt`). Aiven free trial credits expire ~30 days after
+creation; after that either switch to another MySQL host or re-create it and
+re-import `database/schema.sql` + `database/seed.sql`, then update the `DB_*`
+env vars in the Render dashboard (secrets are NOT stored in this repo).
 
 ## Demo accounts
 
