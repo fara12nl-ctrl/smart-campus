@@ -1,0 +1,10 @@
+backend/target/
+backend/backend.log
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+.shots/
+tunnel-url.txt
+cloud-url.txt
+*.jks

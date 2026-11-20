@@ -1,0 +1,28 @@
+package com.smartcampus.model;
+
+/** OOP: inheritance + polymorphism - concrete subclasses define their own role. */
+public abstract class Person extends CampusEntity {
+    protected String name;
+    protected String email;
+    protected String phone;
+
+    protected Person() {}
+
+    protected Person(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public abstract String getRole();
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    @Override
+    public String getKind() { return getRole(); }
+}
